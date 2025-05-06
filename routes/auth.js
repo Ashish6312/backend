@@ -173,7 +173,16 @@ router.post('/verify-payment', async (req, res) => {
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
+router.post('/check-username', async (req, res) => {
+  const { username } = req.body;
 
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    return res.status(400).json({ msg: 'Username is already taken' });
+  }
+
+  res.status(200).json({ msg: 'Username is available' });
+});
 
 // POST /api/transaction/recharge
 router.post('/transaction/recharge', async (req, res) => {
